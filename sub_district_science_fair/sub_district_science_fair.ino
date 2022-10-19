@@ -1,14 +1,19 @@
+// Safe distance alert device
+// Coded by Ishan Jemshid on 2022_10_09 for School Science Fair
+// Updated on 2022_10_19
+// ishan.ubuntu@gmail.com
+
 // buzzer and LED   // declare the ledPin as an OUTPUT:
 const int buzzerPin = 7;
 const int ledPin = 13;
-#include <LiquidCrystal.h>
 
+#include <LiquidCrystal.h>
 // initialize the library by associating any needed LCD interface pin
 // with the arduino pin number it is connected to
 const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
-  // speed read here, with knob
 
+// speed read here, with knob
 int sensorPin = A0;    // select the input pin for the potentiometer
 int adc = 0;
 float sensorSpeed = 0;  // variable to store the value coming from the sensor
@@ -24,7 +29,7 @@ bool safe = 0;
 //gnd to right
 //Vcc to left
 
-  // ultra sound distance sensing below
+// ultra sound distance sensing below
 #define echoPin 8 // attach pin D2 Arduino to pin Echo of HC-SR04
 #define trigPin 9 //attach pin D3 Arduino to pin Trig of HC-SR04
 
@@ -38,10 +43,8 @@ void setup() {
   pinMode(ledPin, OUTPUT);    
 
   lcd.begin(16,2);
-  
-  // speed read here, with knob
-  
-  
+
+  // speed read setup
   
   // ultra sound distance sensing below
   pinMode(trigPin, OUTPUT); // Sets the trigPin as an OUTPUT
@@ -50,20 +53,12 @@ void setup() {
   Serial.println("Ultrasonic Sensor HC-SR04 Test"); // print some text in Serial Monitor
   Serial.println("with Arduino UNO R3");
 }
+
 void loop() {
   // speed read here, with knob  
-    // read the value from the sensor:
+  // read the value from the sensor:
   adc = analogRead(sensorPin);
-
-  
-  //sensorSpeed = 1000 * (90.0/90.0) * log10(1 * (1 + (adc / 1023.0))); 
-  //speedKmph = 1 * (90.0/90.0) * log10(1 * (1 + (sensorSpeed / 1.0))); 
   speedKmph = (adc/1.0);  
-  //Serial.print("Speed: ");
-  //Serial.print(sensorSpeed/speedKmph);
-  //Serial.print(" kilo meter per hour    ");
-
-  
   
   // ultra sound distance sensing below  
   // Clears the trigPin condition
@@ -80,13 +75,10 @@ void loop() {
   // Displays the distance on the Serial Monitor
   
  float timeToHit = distance / (speedKmph * 1000.0 / 3600.0);                                                 ;
- // if (((speedKmph)*10*2)/36 > distance) {
  if ( timeToHit < 2.0) {
-   //Serial.println("Buzz      |");
    digitalWrite(ledPin, HIGH);
    digitalWrite(buzzerPin, LOW);
    safe = 0;
-   
  }
  else
  {
@@ -112,12 +104,7 @@ void loop() {
   lcd.print(safe);
 
   Serial.print("SpeedKmph:");
-  //Serial.print(adc);
-  //Serial.print("  ");
-  //Serial.print(sensorSpeed);
-  //Serial.print("  ");
   Serial.print(speedKmph);
-  //Serial.print(((sensorSpeed/speedKmph)*10*2)/36);
   Serial.print(" Distance:");
   Serial.print(distance);
   Serial.print(" TimeToHit:");
@@ -125,5 +112,4 @@ void loop() {
   Serial.print(" Safe:");
   Serial.println(safe);
   delay(150);
-  
 }
